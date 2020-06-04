@@ -7,7 +7,7 @@
           <span>
             {{ notification.title }}
           </span>
-          <span>
+          <span class="time">
             {{ humanReadable(notification.timestamp) }}
           </span>
         </div>
@@ -115,5 +115,10 @@ export default {
     display: inline-block;
     margin: 0 10px;
     cursor: pointer;
+  }
+
+  .time {
+    float:right;
+    margin-right: 10px;
   }
 </style>
