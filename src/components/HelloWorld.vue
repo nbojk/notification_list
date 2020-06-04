@@ -118,7 +118,7 @@ export default {
   }
 
   .time {
-    float:right;
+    float: right;
     margin-right: 10px;
   }
 </style>
