@@ -1,31 +1,17 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
     <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+      <li @click="markAsSeen(index)" :class="{'seen':notification.seen}" v-for="(notification, index) in notifications" v-bind:key="index">
+        <div class="">
+          <span @click="markAsSeen(index)" class="circle"></span>
+          <span>
+            {{ notification.title }}
+          </span>
+          <span>
+            {{ humanReadable(notification.timestamp) }}
+          </span>
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -33,26 +19,101 @@
 <script>
 export default {
   name: 'HelloWorld',
-  props: {
-    msg: String
+  data() {
+    return {
+      notifications: [
+        {
+          title: "Elon Musk sent you a message",
+          seen: false,
+          timestamp: 1591106486,
+        },
+        {
+          title: "Mark Zuckerberg sent you a message",
+          seen: false,
+          timestamp: 1591106376
+        },
+        {
+          title: "Milivoje would like to tag you in a photo",
+          seen: false,
+          timestamp: 1591106296
+        },
+        {
+          title: "Radivoje liked your comment",
+          seen: false,
+          timestamp: 1591106196
+        },
+        {
+          title: "BIA wants to know you location",
+          seen: false,
+          timestamp: 1591106456
+        }
+      ]
+    }
+  },
+  methods: {
+    markAsSeen: function(index) {
+      this.notifications[index].seen = true;
+    },
+    humanReadable: function(ts) {
+      var date = new Date(ts * 1000);
+      return date.getHours() + ":" + (date.getMinutes());
+    },
+    sortedItems: function() {
+      this.notifications.sort((a, b) => {
+        if (a.timestamp > b.timestamp) {
+          return -1
+        } else if (a.timestamp < b.timestamp) {
+          return 1
+        } else {
+          return 0
+        }
+      });
+    }
+  },
+  beforeMount() {
+    this.sortedItems()
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  ul {
+    list-style-type: none;
+  }
+
+  li {
+    max-width: 500px;
+    text-align: left;
+    margin: 10px auto;
+    background: rgb(66, 218, 210);
+    line-height: 50px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  li.seen {
+    background-color: rgb(167, 224, 222);
+    transition: .5s;
+
+  }
+
+  li.seen .circle {
+    background-color: rgb(241, 174, 143);
+    transition: .5s;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+
+  .circle {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: rgb(255, 81, 0);
+    display: inline-block;
+    margin: 0 10px;
+    cursor: pointer;
+  }
 </style>
